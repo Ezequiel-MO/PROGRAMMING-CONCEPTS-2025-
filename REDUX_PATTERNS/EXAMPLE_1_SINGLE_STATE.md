@@ -2,7 +2,7 @@
 
 # REDUX vs RTK (Redux ToolKit)
 
-## REDUX EXAMPLE 
+## REDUX EXAMPLE - 1 SINGLE STATE
 
 ```typescript
 //This example can be replicated in a nodejs playground, by kicking off a nodejs project, and installing 'redux' library
@@ -81,5 +81,6 @@ unsubscribe()
 
 //COMMENT : Manually subscribing and unsubscribing to the store is only required in REDUX.
 //COMMENT : RTK simplifies this and manages subscribing and unsubscribing under the hood when using the useSelector and useDispatch custom hooks provided by the library
+```
 
 
