@@ -10,12 +10,21 @@ import redux from "redux"
 
 //typing strings
 const INCREMENT_ONE = 'INCREMENT_ONE'
+const INCREMENT_MULTIPLE = 'INCREMENT_MULTIPLE'
 
-//action creator
+//action creator - does not require a payload
 function incrementOne(){
     return {
         type: INCREMENT_ONE,
-        quantity: 1
+        payload: 1
+    }
+}
+
+//action creator with a payload
+function incrementMultiple(qty){
+    return {
+        type: INCREMENT_MULTIPLE,
+        payload: qty
     }
 }
 
@@ -30,7 +39,13 @@ const reducer = (state = initialState, action) =>{
         case : INCREMENT_ONE : {
             return {
                 ...state,
-                numberOfItems: state.numberOfItems +1 
+                numberOfItems: state.numberOfItems + 1
+            }
+        }
+        case : INCREMENT_MULTIPLE : {
+            return {
+                ...state,
+                numberOfItems: state.numberOfItems + action.payload
             }
         }
         default : 
@@ -42,17 +57,23 @@ const reducer = (state = initialState, action) =>{
 const store = redux.createStore(reducer)
 
 //Access state
-//This console.log should give us the initial state since no transitions have been dispatched yet
+//This console.log should give us the initial state since no transitions have been dispatched yet. 
+//The state of numberOfItems will be 20
 console.log('Initial State', store.getState())
 
-//Allow the app to subscribe to changes in state
+//Listener that allows the app to subscribe to changes in state
 
 store.subscribe(()=> console.log( 'updated state' , store.getState()))
 
 //Dispatch to update state - using the action creator
 store.dispatch(incrementOne())
+//The state of numberOfItems will be 21
 //I can dispatch the same action creator multiple times
 store.dispatch(incrementOne())
+//The state of numberOfItems will be 22
+store.dispatch(incrementMultiple(3))
+//The state of numberOfItems will be 25
+
 
 //To unsubscribe the app from state updates, we need to call the subscribe method
 const unsubscribe = store.subscribe(()=> console.log('updated state' , store.getState()))
