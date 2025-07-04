@@ -5,6 +5,8 @@
 
 ```typescript
 import redux from 'redux'
+import axios from 'axios'
+import thunk from 'redux-thunk'
 
 
 // State
@@ -62,7 +64,26 @@ const reducer = (state = initialState, action) => {
     }
 }
 
+//Create an asynchronous action creator. 
+//The async action creator is allowed to have side effects - does not have to be pure
+//The async action creator returns another function instead of an action object like the regular ones
+//The async action creator can dispatch regular actions inside the function
+const fetchUsers = () => {
+    return function(dispatch){
+        dispatch(fetchUsersRequest())
+        axios.get('https://jsonplaceholder.typicode.com/users').then((response)=>{
+        const users = response.data.map((user)=> user.id)
+        dispatch(fetchUsersSuccess(users))
+        }).catch(error){
+            //error.message
+            dispatch(fetchUsersFailure(error.message))
+        }
+    }
+}
+
 // Create redux store
-const store = redux.createStore(reducer)
+const store = redux.createStore(reducer, redux.applyMiddleware(thunk))
+store.subscribe(()=>console.log(store.getState()))
+store.dispatch(fetchUsers())
 
 ```
